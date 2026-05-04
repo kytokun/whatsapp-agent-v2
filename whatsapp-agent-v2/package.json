@@ -1,0 +1,22 @@
+{
+  "name": "whatsapp-ai-agent-v2",
+  "version": "2.0.0",
+  "description": "Full Agentic WhatsApp AI — Multi-Agent, Memory, Self-Eval, Sandbox, CoT Planning",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.0",
+    "@whiskeysockets/baileys": "^6.7.0",
+    "dotenv": "^16.4.0",
+    "mongodb": "^6.5.0",
+    "pino": "^9.0.0",
+    "qrcode-terminal": "^0.12.0",
+    "vm2": "^3.9.19"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
