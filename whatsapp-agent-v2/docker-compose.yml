@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  agent:
+    build: .
+    container_name: whatsapp-agent-v2
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MONGO_URI: mongodb://mongo:27017
+    volumes:
+      - ./auth:/app/auth
+      - ./skills:/app/skills
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - agent-net
+
+  mongo:
+    image: mongo:7-jammy
+    container_name: whatsapp-mongo-v2
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - agent-net
+
+  mongo-express:
+    image: mongo-express
+    container_name: whatsapp-mongo-ui-v2
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: secret123
+    depends_on: [mongo]
+    networks:
+      - agent-net
+    profiles: [debug]
+
+volumes:
+  mongo_data:
+
+networks:
+  agent-net:
+    driver: bridge
